@@ -36,6 +36,7 @@ body{
 }
 
 .cabecalho__menu__link{
+    display: flex;
     font-family: var(--fonte-secundaria);
     font-size: 1.5rem;
     font-weight: 600;
