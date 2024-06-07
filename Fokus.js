@@ -3,12 +3,12 @@ const focoBt = document.querySelector('.app__card-button--foco')
 const curtoBt = document.querySelector('.app__card-button--curto')
 const longoBt = document.querySelector('.app__card-button--longo')
 const banner = document.querySelector('.app__image')
-const imgpp = document.querySelector('.app__card-primary-butto-icon')
 const tempoNaTela = document.querySelector('#timer')
 const title = document.querySelector('.app__title')
 const botoes =document.querySelectorAll('.app__card-button')
 const musicainput = document.querySelector('#alternar-musica')
 const iniciarOuPausarBt = document.querySelector('#start-pause span')
+const iniciarOuPausarBtIcone = document.querySelector(".app__card-primary-butto-icon") 
 const musica = new Audio ('/sounds/xandao.mp3')
 const startPauseBt =document.querySelector ('#start-pause')
 const audioPlay = new Audio('/sounds/play.wav');
@@ -17,7 +17,7 @@ const audioTempoFinalizado = new Audio('./sounds/beep.mp3')
 
 
 
-let tempoDecorridoEmSegundos = 1500
+let tempoDecorridoEmSegundos = 2
 let intervaloId = null
 
 musica.loop = true
@@ -32,7 +32,7 @@ else{
 })
 
 focoBt.addEventListener('click', () => {
-    tempoDecorridoEmSegundos = 1500
+    tempoDecorridoEmSegundos = 2
     alterarContexto('foco')
     focoBt.classList.add('active')
 })
@@ -87,6 +87,11 @@ const contagemRegressiva = () => {
     if(tempoDecorridoEmSegundos <= 0){
         audioTempoFinalizado.play()
         alert ('Tempo Finalizado!')
+        const focoAtivo = html.getAttribute ('data-contexto') == 'foco'
+        if (focoAtivo) {
+            const evento = new CustomEvent('FocoFinalizado')
+            document.dispatchEvent (evento)
+        }
         zerar()
         return
     }
@@ -98,20 +103,21 @@ startPauseBt.addEventListener('click', iniciarOuPausar)
 function iniciarOuPausar() {
     if (intervaloId){
         audioPausa.play()
-        imgpp.setAttribute('src', `/img/play_arrow.png`)
         zerar()
         return
     }
     audioPlay.play()
     intervaloId = setInterval(contagemRegressiva, 1000) 
-    imgpp.setAttribute('src', `/img/pause.png`)
     iniciarOuPausarBt.textContent = "Pausar"
+    iniciarOuPausarBtIcone.setAttribute('src', `/img/pause.png`)
+    
         
 }
 
 function zerar () {
     clearInterval(intervaloId)
     iniciarOuPausarBt.textContent = "Começar"
+    iniciarOuPausarBtIcone.setAttribute('src', `/img/play_arrow.png`)
     intervaloId = null
 }
 
